@@ -1,10 +1,10 @@
-package com.gabrielFadul.taskManager.services;
+package com.gabrielFadul.taskManager.user.service;
 
-import com.gabrielFadul.taskManager.dtos.UserDtoRequest;
-import com.gabrielFadul.taskManager.dtos.UserDtoResponse;
-import com.gabrielFadul.taskManager.mappers.UserMapper;
-import com.gabrielFadul.taskManager.models.UserModel;
-import com.gabrielFadul.taskManager.repository.UserRepository;
+import com.gabrielFadul.taskManager.user.model.UserModel;
+import com.gabrielFadul.taskManager.user.reposity.UserRepository;
+import com.gabrielFadul.taskManager.user.dto.UserDtoRequest;
+import com.gabrielFadul.taskManager.user.dto.UserDtoResponse;
+import com.gabrielFadul.taskManager.user.mapper.UserMapper;
 import org.springframework.stereotype.Service;
 
 @Service

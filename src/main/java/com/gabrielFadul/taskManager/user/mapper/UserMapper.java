@@ -1,8 +1,8 @@
-package com.gabrielFadul.taskManager.mappers;
+package com.gabrielFadul.taskManager.user.mapper;
 
-import com.gabrielFadul.taskManager.dtos.UserDtoRequest;
-import com.gabrielFadul.taskManager.dtos.UserDtoResponse;
-import com.gabrielFadul.taskManager.models.UserModel;
+import com.gabrielFadul.taskManager.user.model.UserModel;
+import com.gabrielFadul.taskManager.user.dto.UserDtoRequest;
+import com.gabrielFadul.taskManager.user.dto.UserDtoResponse;
 import org.springframework.stereotype.Component;
 
 @Component
