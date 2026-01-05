@@ -2,6 +2,7 @@ package com.gabrielFadul.taskManager.controllers;
 
 import com.gabrielFadul.taskManager.models.UserModel;
 import com.gabrielFadul.taskManager.repository.UserRepository;
+import com.gabrielFadul.taskManager.services.UserService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -10,24 +11,20 @@ import java.util.Optional;
 @RequestMapping("/user")
 public class UserController {
 
-    private final UserRepository userRepository;
+    private final UserService userService;
 
-    public UserController(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
     @PostMapping("/cadastrar")
     public UserModel salvarUser(@RequestBody UserModel userModel){
-        if(userRepository.findByEmail(userModel.getEmail()).isPresent()){
-            throw new RuntimeException("Usuário já existe. Tente novamente!");
-        }
-
-        return userRepository.save(userModel);
+        return userService.saveUser(userModel);
     }
 
     @DeleteMapping("/deletar/{id}")
     public void deletarUser(@PathVariable Long id){
-        userRepository.deleteById(id);
+        userService.deleteUser(id);
     }
 
 }
