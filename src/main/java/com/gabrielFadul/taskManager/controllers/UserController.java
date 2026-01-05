@@ -1,8 +1,13 @@
 package com.gabrielFadul.taskManager.controllers;
 
+import com.gabrielFadul.taskManager.dtos.UserDtoRequest;
+import com.gabrielFadul.taskManager.dtos.UserDtoResponse;
 import com.gabrielFadul.taskManager.models.UserModel;
 import com.gabrielFadul.taskManager.repository.UserRepository;
 import com.gabrielFadul.taskManager.services.UserService;
+import org.apache.coyote.Response;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -18,13 +23,15 @@ public class UserController {
     }
 
     @PostMapping("/cadastrar")
-    public UserModel salvarUser(@RequestBody UserModel userModel){
-        return userService.saveUser(userModel);
+    public ResponseEntity<UserDtoResponse> salvarUser(@RequestBody UserDtoRequest userDtoRequest){
+        UserDtoResponse userResponse = userService.saveUser(userDtoRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).body(userResponse);
     }
 
     @DeleteMapping("/deletar/{id}")
-    public void deletarUser(@PathVariable Long id){
+    public ResponseEntity<Void> deletarUser(@PathVariable Long id){
         userService.deleteUser(id);
+        return ResponseEntity.noContent().build();
     }
 
 }

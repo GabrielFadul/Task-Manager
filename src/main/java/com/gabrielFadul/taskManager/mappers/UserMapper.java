@@ -3,7 +3,9 @@ package com.gabrielFadul.taskManager.mappers;
 import com.gabrielFadul.taskManager.dtos.UserDtoRequest;
 import com.gabrielFadul.taskManager.dtos.UserDtoResponse;
 import com.gabrielFadul.taskManager.models.UserModel;
+import org.springframework.stereotype.Component;
 
+@Component
 public class UserMapper {
 
 
