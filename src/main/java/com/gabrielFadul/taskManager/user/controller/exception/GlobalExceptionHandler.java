@@ -1,6 +1,7 @@
 package com.gabrielFadul.taskManager.user.controller.exception;
 
 import com.gabrielFadul.taskManager.user.domain.EmailAlreadyExistsException;
+import com.gabrielFadul.taskManager.user.domain.UserNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -21,6 +22,11 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("email", ex.getMessage()));
     }
 
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<Map<String, String>> handleUserIdNotFound(UserNotFoundException ex){
+        return ResponseEntity.notFound().build();
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleValidationException(MethodArgumentNotValidException ex){
         Map<String, String> errors = new HashMap<>();
@@ -29,6 +35,4 @@ public class GlobalExceptionHandler {
         });
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
-
-
 }

@@ -22,6 +22,7 @@ public class UserModel {
     private String password;
 
     @NotNull
+    @Column(unique = true)
     private String email;
 
     @OneToMany(mappedBy = "user")

@@ -1,6 +1,7 @@
 package com.gabrielFadul.taskManager.user.service;
 
 import com.gabrielFadul.taskManager.user.domain.EmailAlreadyExistsException;
+import com.gabrielFadul.taskManager.user.domain.UserNotFoundException;
 import com.gabrielFadul.taskManager.user.model.UserModel;
 import com.gabrielFadul.taskManager.user.reposity.UserRepository;
 import com.gabrielFadul.taskManager.user.dto.UserDtoRequest;
@@ -28,6 +29,9 @@ public class UserService {
     }
 
     public void deleteUser(Long id){
+        if(userRepository.findById(id).isEmpty()){
+            throw new UserNotFoundException();
+        }
         userRepository.deleteById(id);
     }
 }
