@@ -1,5 +1,7 @@
 package com.gabrielFadul.taskManager.task.controller;
 
+import com.gabrielFadul.taskManager.task.dto.TaskCreateRequest;
+import com.gabrielFadul.taskManager.task.dto.TaskResponse;
 import com.gabrielFadul.taskManager.task.model.TaskModel;
 import com.gabrielFadul.taskManager.task.repository.TaskRepository;
 import com.gabrielFadul.taskManager.task.service.TaskService;
@@ -25,8 +27,8 @@ public class TaskController {
 
     // Criar uma task
     @PostMapping
-    public void createTask(@RequestBody TaskModel taskModel){
-        taskService.create(taskModel);
+    public TaskResponse createTask(@RequestBody TaskCreateRequest request){
+       return taskService.create(request);
     }
 
     // Deletar uma task
