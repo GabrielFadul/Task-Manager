@@ -19,14 +19,17 @@ public class TaskController {
         this.taskService = taskService;
     }
 
-    // Puxar todas as tasks (Listar)
-    @GetMapping("/list")
-    public List<TaskModel> listTaks(){
+    @GetMapping
+    public List<TaskResponse> listTaks(){
         return taskService.listTask();
     }
 
-    // Criar uma task
-    @PostMapping
+    @GetMapping("/{id}")
+    public List<TaskResponse> listTaskById(@PathVariable Long id){
+        return taskService.listTaskById(id);
+    }
+
+    @PostMapping("/createTask")
     public TaskResponse createTask(@RequestBody TaskCreateRequest request){
        return taskService.create(request);
     }

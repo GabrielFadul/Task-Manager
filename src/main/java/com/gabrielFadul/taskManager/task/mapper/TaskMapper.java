@@ -20,7 +20,7 @@ public class TaskMapper {
                 taskModel.getStatusTask(),
                 taskModel.getCreatedAt(),
                 taskModel.getUpdatedAt(),
-                taskModel.getId()
+                taskModel.getUser().getId() // Pego a entidade User já relacionada, usando o ID dela.
         );
     }
 

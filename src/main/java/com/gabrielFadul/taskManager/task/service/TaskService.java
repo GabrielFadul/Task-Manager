@@ -11,6 +11,7 @@ import com.gabrielFadul.taskManager.user.reposity.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -26,9 +27,28 @@ public class TaskService {
         this.taskMapper = taskMapper;
     }
 
-    public List<TaskModel> listTask(){
-         return taskRepository.findAll();
+    public List<TaskResponse> listTask(){
+       List<TaskResponse> listResponse = new ArrayList<>();
+       List<TaskModel> lista = taskRepository.findAll();
+       for(TaskModel taskModel : lista){
+           TaskResponse taskResponse = taskMapper.toDto(taskModel);
+           listResponse.add(taskResponse);
+       }
+
+       return listResponse;
     }
+
+    public List<TaskResponse> listTaskById(Long id) {
+        List<TaskResponse> listResponse = new ArrayList<>();
+        List<TaskModel> lista = taskRepository.findByUserId(id);
+        for(TaskModel taskModel : lista){
+            TaskResponse taskResponse = taskMapper.toDto(taskModel);
+            listResponse.add(taskResponse);
+        }
+        return listResponse;
+    }
+
+
 
     @Transactional
     public TaskResponse create(TaskCreateRequest request){
@@ -42,6 +62,4 @@ public class TaskService {
     public void delete(Long id){
         taskRepository.deleteById(id);
     }
-
-
 }
