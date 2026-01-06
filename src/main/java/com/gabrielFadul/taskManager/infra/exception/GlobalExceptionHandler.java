@@ -1,4 +1,4 @@
-package com.gabrielFadul.taskManager.user.controller.exception;
+package com.gabrielFadul.taskManager.infra.exception;
 
 import com.gabrielFadul.taskManager.user.domain.EmailAlreadyExistsException;
 import com.gabrielFadul.taskManager.user.domain.UserNotFoundException;
@@ -14,7 +14,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestControllerAdvice
-@RequestMapping("/user")
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(EmailAlreadyExistsException.class)

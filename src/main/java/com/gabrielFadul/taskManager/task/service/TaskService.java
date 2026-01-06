@@ -8,6 +8,7 @@ import com.gabrielFadul.taskManager.task.repository.TaskRepository;
 import com.gabrielFadul.taskManager.user.domain.UserNotFoundException;
 import com.gabrielFadul.taskManager.user.model.UserModel;
 import com.gabrielFadul.taskManager.user.reposity.UserRepository;
+import com.gabrielFadul.taskManager.user.service.UserService;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -19,12 +20,12 @@ import java.util.Optional;
 public class TaskService {
 
     private final TaskRepository taskRepository;
-    private final UserRepository userRepository;
+    private final UserService userService;
     private final TaskMapper taskMapper;
 
-    public TaskService(TaskRepository taskRepository, UserRepository userRepository, TaskMapper taskMapper) {
+    public TaskService(TaskRepository taskRepository, UserService userService, TaskMapper taskMapper) {
         this.taskRepository = taskRepository;
-        this.userRepository = userRepository;
+        this.userService = userService;
         this.taskMapper = taskMapper;
     }
 
@@ -53,7 +54,7 @@ public class TaskService {
 
     @Transactional
     public TaskResponse create(TaskCreateRequest request){
-        UserModel userModel = userRepository.findById(request.userID()).orElseThrow(UserNotFoundException::new);
+        UserModel userModel = userService.findEntityById(request.userID());
         TaskModel taskModel = taskMapper.toEntity(request, userModel); // O Request da task + a entidade correlacionada
         taskRepository.save(taskModel);
 

@@ -34,4 +34,10 @@ public class UserService {
         }
         userRepository.deleteById(id);
     }
+
+    public UserModel findEntityById(Long id){
+        return userRepository.findById(id).orElseThrow(UserNotFoundException::new);
+    }
+
+
 }
