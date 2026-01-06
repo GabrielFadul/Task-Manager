@@ -19,29 +19,23 @@ public class TaskController {
         this.taskService = taskService;
     }
 
-    @GetMapping
-    public List<TaskResponse> listTaks(){
-        return taskService.listTask();
+    @GetMapping("/user/{userId}")
+    public List<TaskResponse> listByUserId(@PathVariable Long id){
+        return taskService.listByUserId(id);
     }
 
-    @GetMapping("/{id}")
-    public List<TaskResponse> listTaskById(@PathVariable Long id){
-        return taskService.listTaskById(id);
-    }
-
-    @PostMapping("/createTask")
-    public TaskResponse createTask(@RequestBody TaskCreateRequest request){
+    @PostMapping
+    public TaskResponse create(@RequestBody TaskCreateRequest request){
        return taskService.create(request);
     }
 
-    // Deletar uma task
-    @DeleteMapping("/delete/{id}")
-    public void deleteTask(@PathVariable Long id){
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable Long id){
         taskService.delete(id);
     }
 
-    @DeleteMapping("/user/{userId}/delete")
-    public void deleteAllTaskByUser(@PathVariable Long userId){
+    @DeleteMapping
+    public void deleteAllByUser(@RequestParam Long userId){ // Pega o ID da query parametro (DELETE /tasks?userId={userId})
         taskService.deleteAllByUser(userId);
     }
 }

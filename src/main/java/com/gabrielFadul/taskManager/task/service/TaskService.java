@@ -29,18 +29,7 @@ public class TaskService {
         this.taskMapper = taskMapper;
     }
 
-    public List<TaskResponse> listTask(){
-       List<TaskResponse> listResponse = new ArrayList<>();
-       List<TaskModel> lista = taskRepository.findAll();
-       for(TaskModel taskModel : lista){
-           TaskResponse taskResponse = taskMapper.toDto(taskModel);
-           listResponse.add(taskResponse);
-       }
-
-       return listResponse;
-    }
-
-    public List<TaskResponse> listTaskById(Long id) {
+    public List<TaskResponse> listByUserId(Long id) {
         List<TaskResponse> listResponse = new ArrayList<>();
         List<TaskModel> lista = taskRepository.findByUserId(id);
         for(TaskModel taskModel : lista){
@@ -49,8 +38,6 @@ public class TaskService {
         }
         return listResponse;
     }
-
-
 
     @Transactional
     public TaskResponse create(TaskCreateRequest request){

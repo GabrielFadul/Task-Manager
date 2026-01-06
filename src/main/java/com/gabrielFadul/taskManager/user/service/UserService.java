@@ -19,7 +19,7 @@ public class UserService {
         this.userMapper = userMapper;
     }
 
-    public UserDtoResponse saveUser(UserDtoRequest userDtoRequest){
+    public UserDtoResponse create(UserDtoRequest userDtoRequest){
         if(userRepository.existsByEmail(userDtoRequest.email())){
             throw new EmailAlreadyExistsException(userDtoRequest.email());
         }
@@ -28,7 +28,7 @@ public class UserService {
         return userMapper.toResponse(savedUser);
     }
 
-    public void deleteUser(Long id){
+    public void delete(Long id){
         if(userRepository.findById(id).isEmpty()){
             throw new UserNotFoundException();
         }
