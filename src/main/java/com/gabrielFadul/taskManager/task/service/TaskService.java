@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TaskService {
@@ -59,7 +60,15 @@ public class TaskService {
         return taskMapper.toDto(taskModel);
     }
 
+    @Transactional
     public void delete(Long id){
-        taskRepository.deleteById(id);
+       TaskModel task = taskRepository.findById(id).orElseThrow();
+       taskRepository.delete(task);
     }
+
+    @Transactional
+    public void deleteAllByUser(Long id){
+        taskRepository.deleteByUserId(id);
+    }
+
 }
