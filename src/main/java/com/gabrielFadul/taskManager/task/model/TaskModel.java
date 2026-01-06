@@ -40,7 +40,7 @@ public class TaskModel {
         this.description = description;
         this.statusTask = StatusTask.ABERTO;
         this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
+        this.updatedAt = null;
         this.user = user;
     }
 
@@ -80,8 +80,8 @@ public class TaskModel {
         return updatedAt;
     }
 
-    private void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = LocalDateTime.now();
     }
 
     public LocalDateTime getCreatedAt() {

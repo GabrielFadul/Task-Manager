@@ -2,6 +2,7 @@ package com.gabrielFadul.taskManager.task.controller;
 
 import com.gabrielFadul.taskManager.task.dto.TaskCreateRequest;
 import com.gabrielFadul.taskManager.task.dto.TaskResponse;
+import com.gabrielFadul.taskManager.task.dto.TaskUpdateRequest;
 import com.gabrielFadul.taskManager.task.model.TaskModel;
 import com.gabrielFadul.taskManager.task.repository.TaskRepository;
 import com.gabrielFadul.taskManager.task.service.TaskService;
@@ -20,8 +21,8 @@ public class TaskController {
     }
 
     @GetMapping("/user/{userId}")
-    public List<TaskResponse> listByUserId(@PathVariable Long id){
-        return taskService.listByUserId(id);
+    public List<TaskResponse> listByUserId(@PathVariable Long userId){
+        return taskService.listByUserId(userId);
     }
 
     @PostMapping
@@ -38,4 +39,15 @@ public class TaskController {
     public void deleteAllByUser(@RequestParam Long userId){ // Pega o ID da query parametro (DELETE /tasks?userId={userId})
         taskService.deleteAllByUser(userId);
     }
+
+    @PatchMapping("/{id}")
+    public TaskResponse updatePatch(@PathVariable Long id, @RequestBody TaskUpdateRequest taskUpdateRequest){
+        return taskService.updatePatch(id, taskUpdateRequest);
+    }
+
+    @PutMapping("/{id}")
+    public TaskResponse updatePut(@PathVariable Long id, @RequestBody TaskUpdateRequest taskUpdateRequest){
+        return taskService.updatePut(id, taskUpdateRequest);
+    }
+
 }

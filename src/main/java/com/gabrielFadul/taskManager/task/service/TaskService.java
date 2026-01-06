@@ -2,6 +2,7 @@ package com.gabrielFadul.taskManager.task.service;
 
 import com.gabrielFadul.taskManager.task.dto.TaskCreateRequest;
 import com.gabrielFadul.taskManager.task.dto.TaskResponse;
+import com.gabrielFadul.taskManager.task.dto.TaskUpdateRequest;
 import com.gabrielFadul.taskManager.task.mapper.TaskMapper;
 import com.gabrielFadul.taskManager.task.model.TaskModel;
 import com.gabrielFadul.taskManager.task.repository.TaskRepository;
@@ -58,5 +59,24 @@ public class TaskService {
     public void deleteAllByUser(Long id){
         taskRepository.deleteByUserId(id);
     }
+
+    @Transactional
+    public TaskResponse updatePatch(Long id, TaskUpdateRequest taskUpdateRequest){
+        TaskModel taskModel = taskRepository.findById(id).orElseThrow(); // Pega o Model do ID x
+        taskMapper.updateEntityFromDto(taskUpdateRequest, taskModel); // Pega os campos do request e atualiza o model do ID x
+        return taskMapper.toDto(taskRepository.save(taskModel)); // Converte para DTO o Model salvo
+    }
+
+    @Transactional
+    public TaskResponse updatePut(Long id, TaskUpdateRequest taskUpdateRequest){
+        TaskModel taskModel = taskRepository.findById(id).orElseThrow();
+        taskMapper.updateEntityPut(taskUpdateRequest, taskModel);
+        return taskMapper.toDto(taskRepository.save(taskModel));
+
+    }
+
+
+
+
 
 }
