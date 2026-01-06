@@ -2,6 +2,7 @@ package com.gabrielFadul.taskManager.task.controller;
 
 import com.gabrielFadul.taskManager.task.model.TaskModel;
 import com.gabrielFadul.taskManager.task.repository.TaskRepository;
+import com.gabrielFadul.taskManager.task.service.TaskService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,27 +11,27 @@ import java.util.List;
 @RequestMapping("/tasks")
 public class TaskController {
 
-    private final TaskRepository taskRepository;
+    private final TaskService taskService;
 
-    public TaskController(TaskRepository taskRepository) {
-        this.taskRepository = taskRepository;
+    public TaskController(TaskService taskService) {
+        this.taskService = taskService;
     }
 
     // Puxar todas as tasks (Listar)
     @GetMapping("/list")
     public List<TaskModel> listTaks(){
-        return taskRepository.findAll();
+        return taskService.listTask();
     }
 
     // Criar uma task
     @PostMapping
     public void createTask(@RequestBody TaskModel taskModel){
-        taskRepository.save(taskModel);
+        taskService.create(taskModel);
     }
 
     // Deletar uma task
     @DeleteMapping("/delete/{id}")
     public void deleteTask(@PathVariable Long id){
-        taskRepository.deleteById(id);
+        taskService.delete(id);
     }
 }
