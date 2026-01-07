@@ -40,4 +40,10 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Map<String, String>> handleTaskNotFound(TaskNotFoundException ex){
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("erro", ex.getMessage()));
     }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Map<String, String>> handleGenericException(Exception ex) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(Map.of("error", "Ocorreu um erro interno inesperado."));
+    }
 }
