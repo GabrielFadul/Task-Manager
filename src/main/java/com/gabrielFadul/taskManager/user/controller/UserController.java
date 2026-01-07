@@ -4,6 +4,7 @@ import com.gabrielFadul.taskManager.user.dto.UserDtoRequest;
 import com.gabrielFadul.taskManager.user.dto.UserDtoResponse;
 import com.gabrielFadul.taskManager.user.service.UserService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -30,7 +31,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id){
+    public ResponseEntity<Void> deleteUser(@PathVariable @Positive Long id){
         userService.delete(id);
         return ResponseEntity.noContent().build();
     }
