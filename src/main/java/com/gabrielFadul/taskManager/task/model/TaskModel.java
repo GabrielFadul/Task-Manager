@@ -99,13 +99,4 @@ public class TaskModel {
     public void setUser(UserModel user) {
         this.user = user;
     }
-
-    @Override
-    public String toString() {
-        return "TaskModel{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", statusTask=" + statusTask +
-                '}';
-    }
 }

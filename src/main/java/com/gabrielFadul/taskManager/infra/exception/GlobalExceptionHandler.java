@@ -1,5 +1,6 @@
 package com.gabrielFadul.taskManager.infra.exception;
 
+import com.gabrielFadul.taskManager.task.domain.TaskNotFoundException;
 import com.gabrielFadul.taskManager.user.domain.EmailAlreadyExistsException;
 import com.gabrielFadul.taskManager.user.domain.UserNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -34,4 +35,10 @@ public class GlobalExceptionHandler {
         });
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(TaskNotFoundException.class)
+    public ResponseEntity<Map<String, String>> handleTaskNotFound(TaskNotFoundException ex){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("erro", ex.getMessage()));
+    }
+
 }

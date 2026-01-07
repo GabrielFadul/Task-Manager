@@ -1,5 +1,6 @@
 package com.gabrielFadul.taskManager.task.service;
 
+import com.gabrielFadul.taskManager.task.domain.TaskNotFoundException;
 import com.gabrielFadul.taskManager.task.dto.TaskCreateRequest;
 import com.gabrielFadul.taskManager.task.dto.TaskResponse;
 import com.gabrielFadul.taskManager.task.dto.TaskUpdateRequest;
@@ -19,7 +20,6 @@ import java.util.Optional;
 
 @Service
 public class TaskService {
-
     private final TaskRepository taskRepository;
     private final UserService userService;
     private final TaskMapper taskMapper;
@@ -31,6 +31,9 @@ public class TaskService {
     }
 
     public List<TaskResponse> listByUserId(Long id) {
+        // Fail-Fast -> Verifica se o usuário existe antes de buscar as tarefas
+        userService.findEntityById(id);
+
         List<TaskResponse> listResponse = new ArrayList<>();
         List<TaskModel> lista = taskRepository.findByUserId(id);
         for(TaskModel taskModel : lista){
@@ -43,7 +46,7 @@ public class TaskService {
     @Transactional
     public TaskResponse create(TaskCreateRequest request){
         UserModel userModel = userService.findEntityById(request.userID());
-        TaskModel taskModel = taskMapper.toEntity(request, userModel); // O Request da task + a entidade correlacionada
+        TaskModel taskModel = taskMapper.toEntity(request, userModel);
         taskRepository.save(taskModel);
 
         return taskMapper.toDto(taskModel);
@@ -51,7 +54,7 @@ public class TaskService {
 
     @Transactional
     public void delete(Long id){
-       TaskModel task = taskRepository.findById(id).orElseThrow();
+       TaskModel task = taskRepository.findById(id).orElseThrow(TaskNotFoundException::new);
        taskRepository.delete(task);
     }
 
@@ -62,21 +65,15 @@ public class TaskService {
 
     @Transactional
     public TaskResponse updatePatch(Long id, TaskUpdateRequest taskUpdateRequest){
-        TaskModel taskModel = taskRepository.findById(id).orElseThrow(); // Pega o Model do ID x
-        taskMapper.updateEntityFromDto(taskUpdateRequest, taskModel); // Pega os campos do request e atualiza o model do ID x
-        return taskMapper.toDto(taskRepository.save(taskModel)); // Converte para DTO o Model salvo
+        TaskModel taskModel = taskRepository.findById(id).orElseThrow(TaskNotFoundException::new);
+        taskMapper.updateEntityFromDto(taskUpdateRequest, taskModel);
+        return taskMapper.toDto(taskRepository.save(taskModel));
     }
 
     @Transactional
     public TaskResponse updatePut(Long id, TaskUpdateRequest taskUpdateRequest){
-        TaskModel taskModel = taskRepository.findById(id).orElseThrow();
+        TaskModel taskModel = taskRepository.findById(id).orElseThrow(TaskNotFoundException::new);
         taskMapper.updateEntityPut(taskUpdateRequest, taskModel);
         return taskMapper.toDto(taskRepository.save(taskModel));
-
     }
-
-
-
-
-
 }
