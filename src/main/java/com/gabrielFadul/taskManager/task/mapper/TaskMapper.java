@@ -40,8 +40,6 @@ public class TaskMapper {
         if(dto.statusTask() != null){
             taskModel.setStatusTask(dto.statusTask());
         }
-
-        taskModel.setUpdatedAt(LocalDateTime.now());
     }
 
     public void updateEntityPut(TaskUpdateRequest taskUpdateRequest, TaskModel taskModel){
@@ -50,6 +48,5 @@ public class TaskMapper {
         taskModel.setTitle(taskUpdateRequest.title());
         taskModel.setDescription(taskUpdateRequest.description());
         taskModel.setStatusTask(taskUpdateRequest.statusTask());
-        taskModel.setUpdatedAt(LocalDateTime.now());
     }
 }

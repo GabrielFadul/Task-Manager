@@ -4,6 +4,8 @@ import com.gabrielFadul.taskManager.task.enums.StatusTask;
 import com.gabrielFadul.taskManager.user.model.UserModel;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
 
@@ -25,7 +27,10 @@ public class TaskModel {
     @Column(nullable = false)
     private StatusTask statusTask;
 
+    @CreatedDate
     private LocalDateTime createdAt;
+
+    @LastModifiedDate
     private LocalDateTime updatedAt;
 
     @ManyToOne(optional = false)

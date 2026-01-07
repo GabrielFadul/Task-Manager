@@ -40,5 +40,4 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Map<String, String>> handleTaskNotFound(TaskNotFoundException ex){
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("erro", ex.getMessage()));
     }
-
 }

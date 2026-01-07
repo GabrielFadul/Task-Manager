@@ -103,7 +103,7 @@ public class TaskServiceTests {
     void taskNotFound_Error() {
         Long taskId = 99L;
         when(taskRepository.findById(taskId)).thenReturn(Optional.empty());
-        
+
         assertThrows(TaskNotFoundException.class, () -> taskService.delete(taskId));
     }
 }
