@@ -1,5 +1,6 @@
 package com.gabrielFadul.taskManager.infra.configSecurity;
 
+import com.gabrielFadul.taskManager.user.model.UserModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -12,18 +13,25 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/auth")
 public class AuthenticationController {
     private final AuthenticationManager authenticationManager;
+    private final TokenService tokenService;
 
-    public AuthenticationController(AuthenticationManager authenticationManager) {
+    public AuthenticationController(AuthenticationManager authenticationManager, TokenService tokenService) {
         this.authenticationManager = authenticationManager;
+        this.tokenService = tokenService;
     }
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody LoginRequest data) {
-        // Cria um "crachá" provisório com e-mail e senha
         var usernamePassword = new UsernamePasswordAuthenticationToken(data.email(), data.password());
-        // O Security vai usar o seu UserDetailsService (passo 1) para validar se a senha bate
         var auth = this.authenticationManager.authenticate(usernamePassword);
 
-        return ResponseEntity.ok().build(); // Se chegou aqui, logou!
+        // 1. Pegue o usuário que o Spring acabou de autenticar
+        var user = (UserModel) auth.getPrincipal();
+
+        // 2. Gere o token usando o serviço que já criamos
+        var token = tokenService.generateToken(user);
+
+        // 3. Retorne o token no corpo da resposta
+        return ResponseEntity.ok(token);
     }
 }
