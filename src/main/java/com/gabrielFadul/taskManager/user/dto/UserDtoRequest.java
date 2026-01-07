@@ -17,4 +17,7 @@ public record UserDtoRequest(
         @Email
         @NotBlank(message = "Email não pode ser vazio.")
         String email) {
+    public void setPassword(String senhaCriptografada) {
+
+    }
 }
