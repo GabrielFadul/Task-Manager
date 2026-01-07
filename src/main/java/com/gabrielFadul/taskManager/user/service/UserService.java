@@ -38,6 +38,4 @@ public class UserService {
     public UserModel findEntityById(Long id){
         return userRepository.findById(id).orElseThrow(UserNotFoundException::new);
     }
-
-
 }

@@ -8,11 +8,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriBuilder;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import java.net.URI;
 
 @RestController
 @RequestMapping("/users")
 public class UserController {
-
     private final UserService userService;
 
     public UserController(UserService userService) {
@@ -20,13 +23,14 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<UserDtoResponse> salvarUser(@RequestBody @Valid UserDtoRequest userDtoRequest){
+    public ResponseEntity<UserDtoResponse> createUser(@RequestBody @Valid UserDtoRequest userDtoRequest, UriComponentsBuilder uriBuilder){
         UserDtoResponse userResponse = userService.create(userDtoRequest);
-        return ResponseEntity.status(HttpStatus.CREATED).body(userResponse);
+        URI location = uriBuilder.path("/{id}").buildAndExpand(userResponse.id()).toUri();
+        return ResponseEntity.created(location).body(userResponse);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletarUser(@PathVariable Long id){
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id){
         userService.delete(id);
         return ResponseEntity.noContent().build();
     }

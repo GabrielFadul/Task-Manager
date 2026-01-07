@@ -10,7 +10,6 @@ import java.util.List;
 @Entity
 @Table(name = "users")
 public class UserModel {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -36,10 +35,6 @@ public class UserModel {
         this.name = name;
         this.password = password;
         this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
     }
 
     public void setPassword(String password) {
@@ -72,18 +67,5 @@ public class UserModel {
 
     public List<TaskModel> getTasks() {
         return tasks;
-    }
-
-    public void setTasks(List<TaskModel> tasks) {
-        this.tasks = tasks;
-    }
-
-    @Override
-    public String toString() {
-        return "UserModel{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
-                '}';
     }
 }
