@@ -31,12 +31,10 @@ public class SecurityFilter extends OncePerRequestFilter {
 
         if(token != null) {
             var email = tokenService.validateToken(token);
-            System.out.println("E-mail extraído do token: [" + email + "]"); // ADICIONE ISSO
 
             var user = userRepository.findByEmail(email)
                     .orElseThrow(() -> new RuntimeException("Usuário não encontrado: " + email));
 
-            // Aqui o Spring "anota" que este usuário está autenticado para esta requisição
             var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }

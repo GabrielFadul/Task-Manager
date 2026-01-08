@@ -4,6 +4,7 @@ import com.gabrielFadul.taskManager.user.model.UserModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,16 +23,13 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody LoginRequest data) {
-        var usernamePassword = new UsernamePasswordAuthenticationToken(data.email(), data.password());
-        var auth = this.authenticationManager.authenticate(usernamePassword);
+        UsernamePasswordAuthenticationToken usernamePassword = new UsernamePasswordAuthenticationToken(data.email(), data.password());
+        Authentication auth = this.authenticationManager.authenticate(usernamePassword);
 
-        // 1. Pegue o usuário que o Spring acabou de autenticar
         var user = (UserModel) auth.getPrincipal();
 
-        // 2. Gere o token usando o serviço que já criamos
         var token = tokenService.generateToken(user);
-
-        // 3. Retorne o token no corpo da resposta
+        
         return ResponseEntity.ok(token);
     }
 }
