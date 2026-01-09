@@ -1,4 +1,11 @@
 package com.gabrielFadul.taskManager.adapter.dto;
 
-public record LoginRequest(String email, String password) {
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
+public record LoginRequest(
+        @NotBlank
+        String email,
+        @NotBlank
+        String password) {
 }
