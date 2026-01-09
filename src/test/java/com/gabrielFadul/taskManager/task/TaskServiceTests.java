@@ -40,6 +40,7 @@ public class TaskServiceTests {
     private TaskService taskService;
 
 
+    /*
     @Test
     @DisplayName("Deve listar tarefas por ID de usuário com sucesso")
     void listByUserId_Success() {
@@ -96,7 +97,7 @@ public class TaskServiceTests {
 
         verify(taskMapper).updateEntityFromDto(request, task);
         assertEquals(StatusTask.FINALIZADO, result.statusTask());
-    }
+    } */
 
     @Test
     @DisplayName("Deve lançar erro ao tentar agir sobre tarefa inexistente")

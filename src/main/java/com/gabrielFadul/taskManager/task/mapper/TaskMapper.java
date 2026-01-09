@@ -17,12 +17,12 @@ public class TaskMapper {
 
     public TaskResponse toDto(TaskModel taskModel){
         return new TaskResponse(
+                taskModel.getId(),
                 taskModel.getTitle(),
                 taskModel.getDescription(),
                 taskModel.getStatusTask(),
                 taskModel.getCreatedAt(),
-                taskModel.getUpdatedAt(),
-                taskModel.getUser().getId()
+                taskModel.getUpdatedAt()
         );
     }
 

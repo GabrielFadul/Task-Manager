@@ -1,5 +1,6 @@
 package com.gabrielFadul.taskManager.task.service;
 
+import com.gabrielFadul.taskManager.task.domain.PermissionDeniedException;
 import com.gabrielFadul.taskManager.task.domain.TaskNotFoundException;
 import com.gabrielFadul.taskManager.task.dto.TaskCreateRequest;
 import com.gabrielFadul.taskManager.task.dto.TaskResponse;
@@ -12,6 +13,8 @@ import com.gabrielFadul.taskManager.user.model.UserModel;
 import com.gabrielFadul.taskManager.user.reposity.UserRepository;
 import com.gabrielFadul.taskManager.user.service.UserService;
 import jakarta.transaction.Transactional;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -24,18 +27,18 @@ public class TaskService {
     private final UserService userService;
     private final TaskMapper taskMapper;
 
-    public TaskService(TaskRepository taskRepository, UserService userService, TaskMapper taskMapper) {
+    public TaskService(TaskRepository taskRepository, @Lazy UserService userService, TaskMapper taskMapper) {
         this.taskRepository = taskRepository;
         this.userService = userService;
         this.taskMapper = taskMapper;
     }
 
-    public List<TaskResponse> listByUserId(Long id) {
-        // Fail-Fast -> Verifica se o usuário existe antes de buscar as tarefas
-        userService.findEntityById(id);
+    public List<TaskResponse> listByUserId() {
+        UserModel user = (UserModel) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        userService.findEntityById(user.getId());
 
         List<TaskResponse> listResponse = new ArrayList<>();
-        List<TaskModel> lista = taskRepository.findByUserId(id);
+        List<TaskModel> lista = taskRepository.findByUser(user);
         for(TaskModel taskModel : lista){
             TaskResponse taskResponse = taskMapper.toDto(taskModel);
             listResponse.add(taskResponse);
@@ -45,8 +48,8 @@ public class TaskService {
 
     @Transactional
     public TaskResponse create(TaskCreateRequest request){
-        UserModel userModel = userService.findEntityById(request.userID());
-        TaskModel taskModel = taskMapper.toEntity(request, userModel);
+        UserModel user = (UserModel) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        TaskModel taskModel = taskMapper.toEntity(request, user);
         taskRepository.save(taskModel);
 
         return taskMapper.toDto(taskModel);
@@ -54,26 +57,48 @@ public class TaskService {
 
     @Transactional
     public void delete(Long id){
-       TaskModel task = taskRepository.findById(id).orElseThrow(TaskNotFoundException::new);
-       taskRepository.delete(task);
+        UserModel user = (UserModel) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        TaskModel task = taskRepository.findById(id).orElseThrow(TaskNotFoundException::new);
+
+        if(!task.getUser().getId().equals(user.getId())){
+            throw new PermissionDeniedException();
+        }
+        taskRepository.delete(task);
     }
 
     @Transactional
-    public void deleteAllByUser(Long id){
-        taskRepository.deleteByUserId(id);
+    public void deleteAllByUser(){
+        UserModel user = (UserModel) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        taskRepository.deleteByUserId(user.getId());
     }
 
     @Transactional
     public TaskResponse updatePatch(Long id, TaskUpdateRequest taskUpdateRequest){
-        TaskModel taskModel = taskRepository.findById(id).orElseThrow(TaskNotFoundException::new);
-        taskMapper.updateEntityFromDto(taskUpdateRequest, taskModel);
-        return taskMapper.toDto(taskRepository.save(taskModel));
+        UserModel user = (UserModel) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        TaskModel task = taskRepository.findById(id).orElseThrow(TaskNotFoundException::new);
+
+        if(!task.getUser().getId().equals(user.getId())){
+            throw new PermissionDeniedException();
+        }
+
+        taskMapper.updateEntityFromDto(taskUpdateRequest, task);
+        return taskMapper.toDto(taskRepository.save(task));
     }
 
     @Transactional
     public TaskResponse updatePut(Long id, TaskUpdateRequest taskUpdateRequest){
-        TaskModel taskModel = taskRepository.findById(id).orElseThrow(TaskNotFoundException::new);
-        taskMapper.updateEntityPut(taskUpdateRequest, taskModel);
-        return taskMapper.toDto(taskRepository.save(taskModel));
+        UserModel user = (UserModel) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        TaskModel task = taskRepository.findById(id).orElseThrow(TaskNotFoundException::new);
+
+        if(!task.getUser().getId().equals(user.getId())){
+            throw new PermissionDeniedException();
+        }
+
+        taskMapper.updateEntityPut(taskUpdateRequest, task);
+        return taskMapper.toDto(taskRepository.save(task));
+    }
+
+    public void deleteByUser(Long id){
+        taskRepository.deleteByUserId(id);
     }
 }

@@ -24,16 +24,16 @@ public class TaskController {
         this.taskService = taskService;
     }
 
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<List<TaskResponse>> listByUserId(@PathVariable Long userId){
-        List<TaskResponse> responses = taskService.listByUserId(userId);
+    @GetMapping
+    public ResponseEntity<List<TaskResponse>> listByUserId(){
+        List<TaskResponse> responses = taskService.listByUserId();
         return ResponseEntity.status(HttpStatus.OK).body(responses);
     }
 
     @PostMapping
     public ResponseEntity<TaskResponse> create(@RequestBody TaskCreateRequest request, UriComponentsBuilder uriComponentsBuilder){
-        URI location = uriComponentsBuilder.path("/{id}").buildAndExpand(request.id()).toUri();
         TaskResponse response = taskService.create(request);
+        URI location = uriComponentsBuilder.path("/{id}").buildAndExpand(response.id()).toUri();
        return ResponseEntity.status(HttpStatus.CREATED).location(location).body(response);
     }
 
@@ -44,8 +44,8 @@ public class TaskController {
     }
 
     @DeleteMapping
-    public ResponseEntity<Void> deleteAllByUser(@RequestParam Long id) {
-        taskService.deleteAllByUser(id);
+    public ResponseEntity<Void> deleteAllByUser() {
+        taskService.deleteAllByUser();
         return ResponseEntity.noContent().build();
     }
 

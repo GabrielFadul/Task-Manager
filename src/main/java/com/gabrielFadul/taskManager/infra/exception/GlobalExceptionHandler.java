@@ -1,14 +1,13 @@
 package com.gabrielFadul.taskManager.infra.exception;
 
+import com.gabrielFadul.taskManager.task.domain.PermissionDeniedException;
 import com.gabrielFadul.taskManager.task.domain.TaskNotFoundException;
 import com.gabrielFadul.taskManager.user.domain.EmailAlreadyExistsException;
 import com.gabrielFadul.taskManager.user.domain.UserNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.HashMap;
@@ -46,4 +45,11 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(Map.of("error", "Ocorreu um erro interno inesperado."));
     }
+
+    @ExceptionHandler(PermissionDeniedException.class)
+    public ResponseEntity<Map<String, String>> handlePermissionDenied(PermissionDeniedException ex) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(Map.of("error", ex.getMessage()));
+    }
+
 }
