@@ -40,6 +40,7 @@ public class UserService {
 
     public void deleteAccount(){
         UserModel user = (UserModel) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
         taskService.deleteByUser(user.getId());
         userRepository.deleteById(user.getId());
     }
